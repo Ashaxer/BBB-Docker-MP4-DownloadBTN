@@ -1,5 +1,6 @@
 # BBB-Docker-MP4-DownloadBTN
 This module tries to screen record the published/unpublished recordings and add a beautiful download button for its web page. 
+Special thanks to [manishkatyan](https://github.com/manishkatyan/bbb-mp4) for his work!
 
 # How it works
 When a recording is created inside published or unpublished folder, this service runs a docker container (manishkatyan/bbb-mp4) which creates a virtual chromium window and records the session using ffmpeg library. then copies the output video to the recording folder named after internal id which makes the video available to download directly. 
