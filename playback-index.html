@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/playback/presentation/2.3/favicon.ico" />
+    <link href="/playback/presentation/2.3/styles/video-js.min.css" rel="stylesheet" />
+    <link href="/playback/presentation/2.3/styles/videojs-seek-buttons.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="BigBlueButton recording playback" />
+    <link rel="manifest" href="/playback/presentation/2.3/manifest.json" />
+    <title>Playback</title>
+    <script defer="defer" src="/playback/presentation/2.3/static/js/main.b2c5966f.js"></script>
+    <link href="/playback/presentation/2.3/static/css/main.c006a971.css" rel="stylesheet">
+</head>
+
+<body><noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+<style>
+/* Custom download icon class using the font */
+.icon-download:before {
+    content: "\e93b";
+}
+
+/* Hide download button in fullscreen mode */
+:fullscreen .mp4-download-btn,
+:-webkit-full-screen .mp4-download-btn,
+:-moz-full-screen .mp4-download-btn,
+:-ms-fullscreen .mp4-download-btn {
+    display: none !important;
+}
+</style>
+
+<script>
+// Wait for React to render the DOM
+function waitForElement(selector, callback, maxAttempts = 50) {
+    let attempts = 0;
+    const interval = setInterval(() => {
+        const element = document.querySelector(selector);
+        if (element) {
+            clearInterval(interval);
+            callback(element);
+        } else if (++attempts >= maxAttempts) {
+            clearInterval(interval);
+            console.log('Element not found:', selector);
+        }
+    }, 100);
+}
+
+// Initialize after DOM and React have loaded
+function initDownloadButton() {
+    // Extract meeting ID from URL path
+    const pathParts = window.location.pathname.split('/').filter(p => p);
+    const meetingId = pathParts[pathParts.length - 1];
+    
+    if (!meetingId || meetingId === 'index.html') return;
+    
+    // Construct MP4 URL
+    const mp4Url = `${window.location.origin}/presentation/${meetingId}/${meetingId}.mp4`;
+    
+    // Check if MP4 exists
+    fetch(mp4Url, { method: 'HEAD' })
+        .then(response => {
+            if (response.ok) {
+                createDownloadButton(mp4Url, meetingId);
+            }
+        })
+        .catch(() => console.log('MP4 not yet available'));
+}
+
+function createDownloadButton(mp4Url, meetingId) {
+    // Find the top-bar .right container
+    waitForElement('.top-bar .right', (rightContainer) => {
+        // Create button wrapper to match existing structure
+        const buttonWrapper = document.createElement('div');
+        buttonWrapper.className = 'button-wrapper mp4-download-btn';
+        
+        // Create the button element
+        const downloadBtn = document.createElement('a');
+        downloadBtn.href = mp4Url;
+        downloadBtn.download = `recording_${meetingId}.mp4`;
+        downloadBtn.className = 'button default circle';
+        downloadBtn.setAttribute('aria-label', 'Download MP4');
+        downloadBtn.title = 'Download MP4';
+        
+        // Create span with icon class that uses the font
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'icon-download';
+        
+        downloadBtn.appendChild(iconSpan);
+        buttonWrapper.appendChild(downloadBtn);
+        
+        // Insert as the last button in the .right container
+        rightContainer.appendChild(buttonWrapper);
+        
+        console.log('Download button added successfully');
+    });
+}
+
+// Start initialization when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDownloadButton);
+} else {
+    initDownloadButton();
+}
+</script>
+</body>
+</html>

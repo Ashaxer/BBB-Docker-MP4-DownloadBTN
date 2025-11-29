@@ -1,0 +1,23 @@
+# Serve MP4 files from published recordings
+location ~ ^/presentation/([^/]+)/([^/]+\.mp4)$ {
+    alias /var/bigbluebutton/published/presentation/$1/$2;
+    
+    # Try unpublished if not found in published
+    error_page 404 = @try_unpublished_mp4;
+    
+    # Enable downloads
+    add_header Content-Disposition 'attachment; filename="$2"';
+    add_header Content-Type 'video/mp4';
+    add_header Access-Control-Allow-Origin *;
+    add_header Cache-Control 'public, max-age=86400';
+}
+
+# Fallback to unpublished recordings
+location @try_unpublished_mp4 {
+    rewrite ^/presentation/([^/]+)/([^/]+\.mp4)$ /var/bigbluebutton/unpublished/presentation/$1/$2 break;
+    try_files $uri =404;
+    
+    add_header Content-Disposition 'attachment; filename="$2"';
+    add_header Content-Type 'video/mp4';
+    add_header Access-Control-Allow-Origin *;
+}
