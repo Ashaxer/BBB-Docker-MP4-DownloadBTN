@@ -27,6 +27,7 @@ sudo bash install.sh
 Step 4: Build the new container: 
 
 *Before applyhing any changes to your container, make sure what you are doing, I replaced my container and "it works on my machine". feel free to create issues*
+
 If you want to create a new container:
 ```
 docker build -t bbb-docker-nginx:custom .
