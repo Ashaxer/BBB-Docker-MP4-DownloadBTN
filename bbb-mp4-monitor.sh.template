@@ -1,25 +1,25 @@
 #!/bin/bash
 
 # Configuration
-BASE_PATH="/root/bbb/data/bigbluebutton"
+BASE_PATH="${BASE_PATH}"
 PUBLISHED_PATH="${BASE_PATH}/published/presentation"
 UNPUBLISHED_PATH="${BASE_PATH}/unpublished/presentation"
-BBB_BASE_URL="https://www.example-bbb.com/playback/presentation/2.3"
+BBB_BASE_URL="${BBB_BASE_URL}"
 
 # Limits and settings
-MAX_CONCURRENT=3
-MAX_RETRIES=3
-DOCKER_IMAGE="manishkatyan/bbb-mp4"
+MAX_CONCURRENT=${MAX_CONCURRENT}
+MAX_RETRIES=${MAX_RETRIES}
+DOCKER_IMAGE="${DOCKER_IMAGE}"
 
 # Files for tracking
-LOG_FILE="/var/log/bbb-mp4-automation.log"
-QUEUE_FILE="/var/run/bbb-mp4-queue.txt"
-RETRY_FILE="/var/run/bbb-mp4-retries.txt"
-MONITOR_PIDS_FILE="/var/run/bbb-mp4-monitors.txt"
+LOG_FILE="${LOG_FILE}"
+QUEUE_FILE="${QUEUE_FILE}"
+RETRY_FILE="${RETRY_FILE}"
+MONITOR_PIDS_FILE="${MONITOR_PIDS_FILE}"
 
 # Resource limits
-DOCKER_CPU_LIMIT="2.0"
-DOCKER_MEMORY_LIMIT="4g"
+DOCKER_CPU_LIMIT="${DOCKER_CPU_LIMIT}"
+DOCKER_MEMORY_LIMIT="${DOCKER_MEMORY_LIMIT}"
 
 # Initialize files
 touch "$QUEUE_FILE" "$RETRY_FILE" "$MONITOR_PIDS_FILE"
